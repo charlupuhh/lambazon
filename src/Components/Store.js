@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import axiosWithAuth from './utils/createWithAuth'
 
 export default function Store(){
     const [items, setItems] = useState([])
 
     const loadItems = () => {
-        axios
-        .get("http://keg8893.herokuapp.com/items/items")
+        axiosWithAuth()
+        .get("/items/items")
         .then( res => {
           console.log(res);
           setItems(res.data)

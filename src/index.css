@@ -54,3 +54,9 @@ nav h1 {
     display: flex;
     flex-wrap: wrap;
 }
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+}

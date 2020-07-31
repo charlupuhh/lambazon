@@ -31,8 +31,8 @@ const Login = () =>{
     }
     return(
         <div>
-            <h1>Renter's Login</h1>
-            <form onSubmit={handleSubmit}>
+            <h1>Login</h1>
+            <form className='login-form' onSubmit={handleSubmit}>
                 <input
                     placeholder="username"
                     type="text"
@@ -48,8 +48,8 @@ const Login = () =>{
                     value={cred.password}
                 />
                 <button type="submit">Login</button>
-                <Link to="/register">Create Acount</Link>
             </form>
+            <Link to="/register">Create Acount</Link>
         </div>
     )
 }
