@@ -30,6 +30,10 @@ export default function Dashboard(props){
             .patch(`/roles/promote`, {})
             .then(res => {
                 console.log('promote',res)
+                const t = window.localStorage.getItem('token')
+                console.log(t)
+                window.localStorage.removeItem('token')
+                //window.localStorage.setItem('token', t)
             })
             .catch(err => {
                 console.log('promote error', err)
@@ -104,7 +108,7 @@ export default function Dashboard(props){
 
     return(
         <div>
-            <h1>Hello, you are on the dashboard</h1>
+            <h1>Account Details</h1>
             <div className='top-half'>
                 <div className='account-info'>
                     <p>Account Name: {userInfo.username}</p>
@@ -112,6 +116,7 @@ export default function Dashboard(props){
                     <button onClick={promoteToLender}>Become a Lender!</button>
                 </div>
                 <form className='new-listing' onSubmit={submitItem}>
+                    <h3>Create a new listing!</h3>
                     <label> {'Item Name:  '}
                         <input 
                             name='itemname'
@@ -164,16 +169,18 @@ export default function Dashboard(props){
                 </form>
             </div>
             <div className='bottom-half'>
+                <h2>Your Listed Items</h2>
                 <div className='item-gallery'>
-                    <h2>Your Listed Items</h2>
+                    
                     {userInfo.items.map(item =>(
                         <div
                             className='item-card'
                             key={item.itemid}
                         >
-                            <h3>{item.itemname}</h3>
-                            <p>{item.itemrate}</p>
-                            <img src={item.itemimg} alt='your item'/>
+                            <span>{item.itemname}</span>
+                            <span>${item.itemrate}</span>
+                            <br/>
+                            <img className='listing-img' src={item.itemimg} alt='your item'/>
                             <button onClick={() => editItem(item)}>Edit</button>
                             <button onClick={e => {
                                 e.stopPropagation();
@@ -183,7 +190,11 @@ export default function Dashboard(props){
                     ))}
                 </div>
                 {editing && (
+                    <div>
+
+                    <h5>Edit Item</h5>
                     <form onSubmit={saveEdit}>
+                        
                         <label> {'Item Name:  '}
                             <input 
                                 name='itemname'
@@ -237,6 +248,7 @@ export default function Dashboard(props){
                             <button onClick={() => setEditing(false)}>cancel</button>
                         </div>
                     </form>
+                </div>
                 )}
 
             </div>

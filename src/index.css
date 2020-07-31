@@ -1,0 +1,56 @@
+/* EC3944 lambda*/
+/* F8991D amazon*/
+
+nav {
+    background: #F8991D;
+    width: 100%;
+    height: 5rem;
+}
+nav h1 {
+    color: white;
+    padding: 2px;
+}
+.nav-links{
+    color: #EC3944;
+}
+
+.nav{
+    padding: 10px;
+    text-decoration: none;
+    color:white;
+}
+
+.nav:hover{
+    background: #EC3944;
+}
+
+.top-half{
+    display: flex;
+}
+
+.account-info{
+    width: 40%;
+}
+
+.new-listing{
+    display: flex;
+    flex-direction: column;
+    padding: 2%;
+    border: 2px solid grey;
+}
+
+.item-card{
+    width: 125px;
+    height: 125px;
+    padding: 20px;
+}
+
+.listing-img{
+    width: 100%;
+    height: 70%;
+}
+
+.item-gallery{
+    display: flex;
+    flex-wrap: wrap;
+}

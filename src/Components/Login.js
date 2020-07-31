@@ -48,7 +48,7 @@ const Login = () =>{
                     value={cred.password}
                 />
                 <button type="submit">Login</button>
-                <Link to="/createform">Create Acount</Link>
+                <Link to="/register">Create Acount</Link>
             </form>
         </div>
     )
