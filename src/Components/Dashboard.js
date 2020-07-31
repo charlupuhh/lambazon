@@ -3,6 +3,9 @@ import {Link} from 'react-router-dom';
 import {useHistory} from 'react-router-dom'
 import axiosWithAuth from './utils/axiosWithAuth'
 
+import {useRecoilState} from 'recoil'
+import {userInfoState} from '../States'
+
 
 const initialForm ={
     "itemname": "",
@@ -15,7 +18,8 @@ const initialForm ={
   }
 
 export default function Dashboard(props){
-    const [userInfo, setUserInfo] = useState({items:[]})
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+    //const [userInfo, setUserInfo] = useState({items:[]})
     const [form, setForm] = useState(initialForm)
     const [tokenValue, setTokenValue] = useState();
     const [editing, setEditing] = useState(false);
