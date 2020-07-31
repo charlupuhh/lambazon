@@ -14,38 +14,16 @@ const initialForm ={
     "itemimg": ""
   }
 
-const itemList = [
-    {
-        "itemname": "mors martell",
-        "itemtype": "woodfoot of bear island",
-        "itemdescr": "this is a fake description of an item",
-        "itemlocat": "Tyria",
-        "isavailable": true,
-        "itemrate": 725.01,
-        "itemimg": "https://picsum.photos/seed/Caterpie/300/300"
-      },
-      {
-        "itemname": "mors martell",
-        "itemtype": "woodfoot of bear island",
-        "itemdescr": "this is a fake description of an item",
-        "itemlocat": "Tyria",
-        "isavailable": true,
-        "itemrate": 725.01,
-        "itemimg": "https://picsum.photos/seed/Caterpie/300/300"
-      }
-]
-
 export default function Dashboard(props){
-    const [userInfo, setUserInfo] = useState({})
+    const [userInfo, setUserInfo] = useState({items:[]})
     const [form, setForm] = useState(initialForm)
     const [tokenValue, setTokenValue] = useState();
+    const [editing, setEditing] = useState(false);
+    const [itemToEdit, setItemToEdit] = useState(initialForm);
     //FUNCTIONS
     //Make current user a lender
 
-    function routeToItem(ev, item) {
-        ev.preventDefault();
-        props.history.push(`/dashboard/${item.id}`);
-      }
+
 
     function promoteToLender(e){
         axiosWithAuth()
@@ -68,16 +46,43 @@ export default function Dashboard(props){
             .catch(err => console.log('Get User Info error', err))
     }
 
-    //Find user's role
-    function roleFinder(roles){
-        console.log(roles.filter(role=>role.roleid===roles.length-1))
+    const editItem = item => {
+        setEditing(true)
+        setItemToEdit(item)
     }
-    // roleFinder(userInfo.roles)
 
     //Change handler
     const handleChange = e =>{
         setForm({...form,[e.target.name]: e.target.value })
     }
+
+    const handleEditChange = e =>{
+        setItemToEdit({...itemToEdit,[e.target.name]: e.target.value })
+    }
+
+    const saveEdit = e => {
+        e.preventDefault();
+        console.log(itemToEdit)
+        // Make a put request to save your updated color
+        // think about where will you get the id from...
+        // where is is saved right now?
+        axiosWithAuth()
+          .patch(`/items/item/${itemToEdit.itemid}`, itemToEdit)
+          .then(res => {
+            getUserInfo();
+          })
+          .catch(err => console.log(err));
+    };
+
+    const deleteItem = item => {
+        //e.preventDefault();
+        axiosWithAuth()
+          .delete(`/items/item/${item.itemid}`)
+          .then(res => {
+              getUserInfo();
+          })
+          .catch(err => console.log(err));
+    };
 
     const submitItem = e => {
         e.preventDefault();
@@ -97,7 +102,6 @@ export default function Dashboard(props){
         getUserInfo();
       }, [])
 
-      console.log(userInfo.roles)
     return(
         <div>
             <h1>Hello, you are on the dashboard</h1>
@@ -159,20 +163,82 @@ export default function Dashboard(props){
                     <button>Add Item</button>
                 </form>
             </div>
-            <div className='your-items'>
-                <h2>Your Listed Items</h2>
-                {/* Replace itemList with userInfo.items */}
-                {itemList.map(item =>(
-                    <div
-                        onClick={ev=>routeToItem(ev, item)}
-                        className='item-card'
-                        key={item.itemid}
-                    >
-                        <h3>{item.itemname}</h3>
-                        <p>{item.itemrate}</p>
-                        <img src={item.itemimg} alt='your item'/>
-                    </div>
-                ))}
+            <div className='bottom-half'>
+                <div className='item-gallery'>
+                    <h2>Your Listed Items</h2>
+                    {userInfo.items.map(item =>(
+                        <div
+                            className='item-card'
+                            key={item.itemid}
+                        >
+                            <h3>{item.itemname}</h3>
+                            <p>{item.itemrate}</p>
+                            <img src={item.itemimg} alt='your item'/>
+                            <button onClick={() => editItem(item)}>Edit</button>
+                            <button onClick={e => {
+                                e.stopPropagation();
+                                deleteItem(item)
+                            }}>Delete</button>
+                        </div>
+                    ))}
+                </div>
+                {editing && (
+                    <form onSubmit={saveEdit}>
+                        <label> {'Item Name:  '}
+                            <input 
+                                name='itemname'
+                                onChange={handleEditChange} 
+                                placeholder='Item Name'
+                                value={itemToEdit.itemname}
+                                type='text' />
+                        </label>
+                        <label> {'Item Type:  '}
+                            <input 
+                                name='itemtype'
+                                onChange={handleEditChange} 
+                                placeholder='Item Type'
+                                value={itemToEdit.itemtype}
+                                type='text' />
+                        </label>
+                        <label> {'Item Description:  '}
+                            <input 
+                                name='itemdescr'
+                                onChange={handleEditChange} 
+                                placeholder='Item Description'
+                                value={itemToEdit.itemdescr}
+                                type='text' />
+                        </label>
+                        <label> {'Rental Rate:  '}
+                            <input 
+                                name='itemrate'
+                                onChange={handleEditChange} 
+                                placeholder='Item Rate'
+                                value={itemToEdit.itemrate}
+                                type='text' />
+                        </label>
+                        <label> {'Item Location:  '}
+                            <input 
+                                name='itemlocat'
+                                onChange={handleEditChange} 
+                                placeholder='Item Location'
+                                value={itemToEdit.itemlocat}
+                                type='text' />
+                        </label>
+                        <label> {'Item Picture:  '}
+                            <input 
+                                name='itemimg'
+                                onChange={handleEditChange} 
+                                placeholder='Item Image Link'
+                                value={itemToEdit.itemimg}
+                                type='text' />
+                        </label>
+                        <div className="button-row">
+                            <button type="submit">save</button>
+                            <button onClick={() => setEditing(false)}>cancel</button>
+                        </div>
+                    </form>
+                )}
+
             </div>
         </div>
     )
