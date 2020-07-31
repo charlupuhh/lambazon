@@ -28,7 +28,7 @@ const Register = () =>{
     return(
         <div>
             <h1>Join Lambazon!</h1>
-            <form onSubmit={handleSubmit}>
+            <form className='register-form' onSubmit={handleSubmit}>
                 <input
                     placeholder="username"
                     type="text"

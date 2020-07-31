@@ -60,3 +60,9 @@ nav h1 {
     flex-direction: column;
     width: 20%;
 }
+
+.register-form{
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+}
